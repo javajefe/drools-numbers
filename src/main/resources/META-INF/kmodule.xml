@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://www.drools.org/xsd/kmodule">
+
+    <kbase packages="org.javajefe.pocs" default="true">
+        <ksession name="NumbersKS" default="true" type="stateful"/>
+    </kbase>
+</kmodule>

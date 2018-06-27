@@ -1,0 +1,51 @@
+package org.javajefe.pocs;
+
+rule "All dividers are positive numbers less than the number"
+when
+    TheNumber($n: value > 1) or Divider($n: value > 1)
+then
+    insert(new Divider($n - 1));
+end
+
+rule "All dividers should divide the number"
+when
+    TheNumber($n: value)
+    $d: Divider(($n % value) != 0)
+then
+    delete($d);
+end
+
+rule "A perfect number is equal to the sum of its divisors"
+when
+    $sum: Integer() from accumulate(Divider($d: value), sum($d))
+    TheNumber(value == $sum)
+then
+    insertLogical("The number is perfect");
+end
+
+rule "A prime number has no dividers other than 1 and itself"
+when
+    not TheNumber(value == 1)
+    not Divider(value > 1)
+then
+    insertLogical("The number is prime");
+end
+
+rule "A perfect square is a product of two equal integers"
+// That means it has only 3 dividers: 1, itself and square root
+when
+    Number(intValue() == 1) from accumulate(Divider(value > 1), count(1))
+then
+    insertLogical("The number is a perfect square");
+end
+
+rule "Even number has divider 2"
+when
+    Divider(value == 2) or TheNumber(value == 2)
+then
+    insertLogical("The number is even");
+end
+
+query "Get all decisions"
+    $decision: String()
+end

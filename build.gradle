@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "org.javajefe.pocs.Main"
+group = 'org.javajefe.pocs'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile('org.kie:kie-api:7.7.0.Final')
+//    compile('org.kie:kie-internal:7.7.0.Final')
+	compile('org.drools:drools-core:7.7.0.Final')
+    compile('org.drools:drools-compiler:7.7.0.Final')
+    compile('org.slf4j:slf4j-api:1.7.25')
+    runtime('ch.qos.logback:logback-classic:1.2.3')
+}
