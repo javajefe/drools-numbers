@@ -12,7 +12,6 @@ repositories {
 
 dependencies {
 	compile('org.kie:kie-api:7.7.0.Final')
-//    compile('org.kie:kie-internal:7.7.0.Final')
 	compile('org.drools:drools-core:7.7.0.Final')
     compile('org.drools:drools-compiler:7.7.0.Final')
     compile('org.slf4j:slf4j-api:1.7.25')

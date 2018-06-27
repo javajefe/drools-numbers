@@ -1,4 +1,4 @@
-package org.javajefe.pocs;
+package org.javajefe.pocs.typed;
 
 rule "All dividers are positive numbers less than the number"
 when
@@ -32,9 +32,9 @@ then
 end
 
 rule "A perfect square is a product of two equal integers"
-// That means it has only 3 dividers: 1, itself and square root
 when
-    Number(intValue() == 1) from accumulate(Divider(value > 1), count(1))
+    Divider($d: value)
+    TheNumber(value == $d * $d)
 then
     insertLogical("The number is a perfect square");
 end

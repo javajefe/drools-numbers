@@ -1,0 +1,56 @@
+package org.javajefe.pocs.untyped;
+
+dialect "mvel"
+
+import java.util.Map
+import java.util.HashMap;
+
+rule "All dividers are positive numbers less than the number"
+when
+    Map(this["type"] == "the-number", $n: this["value"] > 1) or Map(this["type"] == "divider", $n: this["value"] > 1)
+then
+    insert(["type": "divider", "value": ($n - 1)]);
+end
+
+rule "All dividers should divide the number"
+when
+    Map(this["type"] == "the-number", $n: this["value"])
+    $d: Map(this["type"] == "divider", ($n % value) != 0)
+then
+    delete($d);
+end
+
+rule "A perfect number is equal to the sum of its divisors"
+when
+    $sum: Integer() from accumulate(Map(this["type"] == "divider", $d: this["value"]), sum($d))
+    Map(this["type"] == "the-number", this["value"] == $sum)
+then
+    insertLogical("The number is perfect");
+end
+
+rule "A prime number has no dividers other than 1 and itself"
+when
+    not Map(this["type"] == "the-number", this["value"] == 1)
+    not Map(this["type"] == "divider", this["value"] > 1)
+then
+    insertLogical("The number is prime");
+end
+
+rule "A perfect square is a product of two equal integers"
+when
+    Map(this["type"] == "divider", $d: this["value"])
+    Map(this["type"] == "the-number", this["value"] == $d * $d)
+then
+    insertLogical("The number is a perfect square");
+end
+
+rule "Even number has divider 2"
+when
+    Map(this["type"] == "divider", this["value"] == 2) or Map(this["type"] == "the-number", this["value"] == 2)
+then
+    insertLogical("The number is even");
+end
+
+query "Get all decisions"
+    $decision: String()
+end

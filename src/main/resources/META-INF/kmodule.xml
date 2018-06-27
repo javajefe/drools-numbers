@@ -2,7 +2,11 @@
 <kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://www.drools.org/xsd/kmodule">
 
-    <kbase packages="org.javajefe.pocs" default="true">
-        <ksession name="NumbersKS" default="true" type="stateful"/>
+    <kbase packages="org.javajefe.pocs.typed" default="true">
+        <ksession name="TypedNumbersKS" default="true" type="stateful"/>
+    </kbase>
+
+    <kbase packages="org.javajefe.pocs.untyped">
+        <ksession name="UntypedNumbersKS" type="stateful"/>
     </kbase>
 </kmodule>
