@@ -37,32 +37,40 @@ public class Main {
 
     public void analyzeTypedNumber(int number) {
         System.out.println("Analyzing the number (typed) " + number);
-        KieSession kieSession = kc.newKieSession("TypedNumbersKS");
-        kieSession.insert(new TheNumber(number));
-        kieSession.fireAllRules();
-
-        QueryResults results = kieSession.getQueryResults("Get all decisions");
-        for (QueryResultsRow row: results) {
-            System.out.println(row.get("$decision"));
-        }
-
-        kieSession.destroy();
+        runDrools("typed", new TheNumber(number));
     }
 
     public void analyzeUntypedNumber(int number) {
         System.out.println("Analyzing the number (untyped) " + number);
-        KieSession kieSession = kc.newKieSession("UntypedNumbersKS");
         Map<String, Object> numberMap = new HashMap<>();
         numberMap.put("value", number);
         numberMap.put("type", "the-number");
-        kieSession.insert(numberMap);
-        kieSession.fireAllRules();
+        runDrools("untyped", numberMap);
+    }
 
-        QueryResults results = kieSession.getQueryResults("Get all decisions");
-        for (QueryResultsRow row: results) {
-            System.out.println(row.get("$decision"));
+    private void runDrools(String typeMode, Object fact) {
+        String sessionName = null;
+        switch (typeMode) {
+            case "typed": sessionName = "TypedNumbersKS"; break;
+            case "untyped": sessionName = "UntypedNumbersKS"; break;
+            default: throw new IllegalArgumentException("Unknown type mode: " + typeMode);
         }
 
-        kieSession.destroy();
+        KieSession kieSession = null;
+        try {
+            // We're using statefull session just in demo purpose
+            kieSession = kc.newKieSession(sessionName);
+            kieSession.insert(fact);
+            kieSession.fireAllRules();
+
+            QueryResults results = kieSession.getQueryResults("Get all decisions");
+            for (QueryResultsRow row : results) {
+                System.out.println(row.get("$decision"));
+            }
+        } finally {
+            // We MUST destroy statefull session explicitly to avoid memory leaks
+            if (kieSession != null)
+                kieSession.destroy();
+        }
     }
 }
